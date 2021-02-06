@@ -1,0 +1,125 @@
+C51 COMPILER V9.00   TASKSW                                                                11/28/2020 23:37:48 PAGE 1   
+
+
+C51 COMPILER V9.00, COMPILATION OF MODULE TASKSW
+NO OBJECT MODULE REQUESTED
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE ..\51OS\TASKSW.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\51OS;..\APP;..\BSP;.
+                    -.\HARDWARE;..\..\51-OS;..\Project) DEBUG OBJECTEXTEND PRINT(.\TASKSW.lst) TABS(2) SRC(.\TASKSW.SRC)
+
+line level    source
+
+   1          #include "os.h"
+   2          
+   3          void Task_Sched(void)
+   4          {
+   5   1        EA=0;//关中断 临界段保护
+   6   1        
+   7   1        OS_Search();
+   8   1        if(OSPrioCur == First_Start)
+   9   1        {
+  10   2          //第一次启动，切换最高优先级任务
+  11   2           SP=OSRdyList[TASK_NUM-1].Task_Sp;
+  12   2           __asm POP 7        
+  13   2           __asm POP 6
+  14   2           __asm POP 5
+  15   2           __asm POP 4
+  16   2           __asm POP 3
+  17   2           __asm POP 2
+  18   2           __asm POP 1
+  19   2           __asm POP 0
+  20   2           __asm POP DPH
+  21   2           __asm POP DPL
+  22   2           __asm POP PSW
+  23   2           __asm POP B
+  24   2           __asm POP ACC 
+  25   2           OSPrioCur=TASK_NUM-1;
+  26   2        }
+  27   1        if( OSRdyList[OSPrioCur].DelayCnt != 0)
+  28   1        {
+  29   2           __asm PUSH ACC       //保护当前任务寄存器
+  30   2           __asm PUSH B
+  31   2           __asm PUSH PSW
+  32   2           __asm PUSH DPL
+  33   2           __asm PUSH DPH
+  34   2           __asm PUSH 0         //0-7为工作寄存器
+  35   2           __asm PUSH 1
+  36   2           __asm PUSH 2
+  37   2           __asm PUSH 3
+  38   2           __asm PUSH 4
+  39   2           __asm PUSH 5
+  40   2           __asm PUSH 6
+  41   2           __asm PUSH 7
+  42   2           OSRdyList[OSPrioCur].Task_Sp=SP;   //保存当前堆栈指针
+  43   2      
+  44   2           SP=OSRdyList[OSPrioHighRdy].Task_Sp;     //任务堆栈指针切换
+  45   2           __asm POP 7         //恢复任务寄存器
+  46   2           __asm POP 6
+  47   2           __asm POP 5
+  48   2           __asm POP 4
+  49   2           __asm POP 3
+  50   2           __asm POP 2
+  51   2           __asm POP 1
+  52   2           __asm POP 0
+  53   2           __asm POP DPH
+  54   2           __asm POP DPL
+C51 COMPILER V9.00   TASKSW                                                                11/28/2020 23:37:48 PAGE 2   
+
+  55   2           __asm POP PSW
+  56   2           __asm POP B
+  57   2           __asm POP ACC
+  58   2           OSPrioCur=OSPrioHighRdy;
+  59   2        }
+  60   1          
+  61   1        
+  62   1        if(OSPrioHighRdy<OSPrioCur)
+  63   1        {
+  64   2           __asm PUSH ACC       //保护当前任务寄存器
+  65   2           __asm PUSH B
+  66   2           __asm PUSH PSW
+  67   2           __asm PUSH DPL
+  68   2           __asm PUSH DPH
+  69   2           __asm PUSH 0         //0-7为工作寄存器
+  70   2           __asm PUSH 1
+  71   2           __asm PUSH 2
+  72   2           __asm PUSH 3
+  73   2           __asm PUSH 4
+  74   2           __asm PUSH 5
+  75   2           __asm PUSH 6
+  76   2           __asm PUSH 7
+  77   2           OSRdyList[OSPrioCur].Task_Sp=SP;   //保存当前堆栈指针
+  78   2      
+  79   2           SP=OSRdyList[OSPrioHighRdy].Task_Sp;     //任务堆栈指针切换
+  80   2           __asm POP 7         //恢复任务寄存器
+  81   2           __asm POP 6
+  82   2           __asm POP 5
+  83   2           __asm POP 4
+  84   2           __asm POP 3
+  85   2           __asm POP 2
+  86   2           __asm POP 1
+  87   2           __asm POP 0
+  88   2           __asm POP DPH
+  89   2           __asm POP DPL
+  90   2           __asm POP PSW
+  91   2           __asm POP B
+  92   2           __asm POP ACC
+  93   2           OSPrioCur=OSPrioHighRdy;
+  94   2         }
+  95   1        
+  96   1      
+  97   1        EA=1;
+  98   1        __asm RETI
+  99   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    293    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

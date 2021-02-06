@@ -1,0 +1,470 @@
+A51 MACRO ASSEMBLER  TASKSW                                                               11/28/2020 23:37:48 PAGE     1
+
+
+MACRO ASSEMBLER A51 V8.01
+OBJECT MODULE PLACED IN .\TASKSW.OBJ
+ASSEMBLER INVOKED BY: C:\Keil_v5\C51\BIN\A51.EXE .\TASKSW.src PR(.\TASKSW.ls1) EP DEBUG
+
+LOC  OBJ            LINE     SOURCE
+
+                       1     ; .\TASKSW.SRC generated from: ..\51OS\TASKSW.c
+                       2     ; COMPILER INVOKED BY:
+                       3     ;        C:\Keil_v5\C51\BIN\C51.EXE ..\51OS\TASKSW.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\51O
+                             S;..\APP;..\BSP;..\HARDWARE;..\..\51-OS;..\Project) DEBUG OBJECTEXTEND PRINT(.\TASKSW.lst) TABS(2) SRC(.\TASKSW.SRC)
+                       4     
+                       5     $nomod51 
+                       6     
+                       7     NAME    TASKSW
+                       8     
+  0080                 9     P0      DATA    080H
+  0090                10     P1      DATA    090H
+  00A0                11     P2      DATA    0A0H
+  00B0                12     P3      DATA    0B0H
+  00B4                13     T0      BIT     0B0H.4
+  00D6                14     AC      BIT     0D0H.6
+  00B5                15     T1      BIT     0B0H.5
+  0090                16     T2      BIT     090H.0
+  00AF                17     EA      BIT     0A8H.7
+  00A8                18     IE      DATA    0A8H
+  00CE                19     EXF2    BIT     0C8H.6
+  00B7                20     RD      BIT     0B0H.7
+  00AC                21     ES      BIT     0A8H.4
+  00B8                22     IP      DATA    0B8H
+  0098                23     RI      BIT     098H.0
+  00B2                24     INT0    BIT     0B0H.2
+  00D7                25     CY      BIT     0D0H.7
+  0099                26     TI      BIT     098H.1
+  00B3                27     INT1    BIT     0B0H.3
+  00CB                28     RCAP2H  DATA    0CBH
+  00BC                29     PS      BIT     0B8H.4
+  0081                30     SP      DATA    081H
+  0091                31     T2EX    BIT     090H.1
+  00D2                32     OV      BIT     0D0H.2
+  00CA                33     RCAP2L  DATA    0CAH
+  00C9                34     C_T2    BIT     0C8H.1
+  00B6                35     WR      BIT     0B0H.6
+  00CD                36     RCLK    BIT     0C8H.5
+  00CC                37     TCLK    BIT     0C8H.4
+  0099                38     SBUF    DATA    099H
+  0087                39     PCON    DATA    087H
+  0098                40     SCON    DATA    098H
+  0089                41     TMOD    DATA    089H
+  0088                42     TCON    DATA    088H
+  0089                43     IE0     BIT     088H.1
+  008B                44     IE1     BIT     088H.3
+  00F0                45     B       DATA    0F0H
+  00C8                46     CP_RL2  BIT     0C8H.0
+  00E0                47     ACC     DATA    0E0H
+  00A9                48     ET0     BIT     0A8H.1
+  00AB                49     ET1     BIT     0A8H.3
+  008D                50     TF0     BIT     088H.5
+  00AD                51     ET2     BIT     0A8H.5
+  008F                52     TF1     BIT     088H.7
+  00CF                53     TF2     BIT     0C8H.7
+  009A                54     RB8     BIT     098H.2
+  008C                55     TH0     DATA    08CH
+  00A8                56     EX0     BIT     0A8H.0
+  0088                57     IT0     BIT     088H.0
+A51 MACRO ASSEMBLER  TASKSW                                                               11/28/2020 23:37:48 PAGE     2
+
+  008D                58     TH1     DATA    08DH
+  009B                59     TB8     BIT     098H.3
+  00AA                60     EX1     BIT     0A8H.2
+  008A                61     IT1     BIT     088H.2
+  00CD                62     TH2     DATA    0CDH
+  00D0                63     P       BIT     0D0H.0
+  009F                64     SM0     BIT     098H.7
+  008A                65     TL0     DATA    08AH
+  009E                66     SM1     BIT     098H.6
+  008B                67     TL1     DATA    08BH
+  009D                68     SM2     BIT     098H.5
+  00CC                69     TL2     DATA    0CCH
+  00B9                70     PT0     BIT     0B8H.1
+  00BB                71     PT1     BIT     0B8H.3
+  00D3                72     RS0     BIT     0D0H.3
+  00BD                73     PT2     BIT     0B8H.5
+  008C                74     TR0     BIT     088H.4
+  00D4                75     RS1     BIT     0D0H.4
+  008E                76     TR1     BIT     088H.6
+  00CA                77     TR2     BIT     0C8H.2
+  00B8                78     PX0     BIT     0B8H.0
+  00BA                79     PX1     BIT     0B8H.2
+  0083                80     DPH     DATA    083H
+  0082                81     DPL     DATA    082H
+  00CB                82     EXEN2   BIT     0C8H.3
+  009C                83     REN     BIT     098H.4
+  00C8                84     T2CON   DATA    0C8H
+  00B0                85     RXD     BIT     0B0H.0
+  00B1                86     TXD     BIT     0B0H.1
+  00D5                87     F0      BIT     0D0H.5
+  00D0                88     PSW     DATA    0D0H
+                      89     ?PR?Task_Sched?TASKSW                    SEGMENT CODE 
+                      90             EXTRN   CODE (OS_Search)
+                      91             EXTRN   DATA (OSPrioCur)
+                      92             EXTRN   DATA (OSRdyList)
+                      93             EXTRN   DATA (OSPrioHighRdy)
+                      94             PUBLIC  Task_Sched
+                      95     ; #include "os.h"
+                      96     ; 
+                      97     ; void Task_Sched(void)
+                      98     
+----                  99             RSEG  ?PR?Task_Sched?TASKSW
+0000                 100     Task_Sched:
+                     101             USING   0
+                     102                             ; SOURCE LINE # 3
+                     103     ; {
+                     104                             ; SOURCE LINE # 4
+                     105     ;       EA=0;//关中断 临界段保护
+                     106                             ; SOURCE LINE # 5
+0000 C2AF            107             CLR     EA
+                     108     ;       
+                     109     ;       OS_Search();
+                     110                             ; SOURCE LINE # 7
+0002 120000   F      111             LCALL   OS_Search
+                     112     ;       if(OSPrioCur == First_Start)
+                     113                             ; SOURCE LINE # 8
+0005 E500     F      114             MOV     A,OSPrioCur
+0007 640B            115             XRL     A,#0BH
+0009 7020            116             JNZ     ?C0001
+                     117     ;       {
+                     118                             ; SOURCE LINE # 9
+                     119     ;               //第一次启动，切换最高优先级任务
+                     120     ;                SP=OSRdyList[TASK_NUM-1].Task_Sp;
+                     121                             ; SOURCE LINE # 11
+000B 850081   F      122             MOV     SP,OSRdyList+010H
+                     123     ;                __asm POP 7        
+A51 MACRO ASSEMBLER  TASKSW                                                               11/28/2020 23:37:48 PAGE     3
+
+000E D007            124              POP 7        
+                     125     ;                __asm POP 6
+0010 D006            126              POP 6
+                     127     ;                __asm POP 5
+0012 D005            128              POP 5
+                     129     ;                __asm POP 4
+0014 D004            130              POP 4
+                     131     ;                __asm POP 3
+0016 D003            132              POP 3
+                     133     ;                __asm POP 2
+0018 D002            134              POP 2
+                     135     ;                __asm POP 1
+001A D001            136              POP 1
+                     137     ;                __asm POP 0
+001C D000            138              POP 0
+                     139     ;                __asm POP DPH
+001E D083            140              POP DPH
+                     141     ;                __asm POP DPL
+0020 D082            142              POP DPL
+                     143     ;                __asm POP PSW
+0022 D0D0            144              POP PSW
+                     145     ;                __asm POP B
+0024 D0F0            146              POP B
+                     147     ;                __asm POP ACC 
+0026 D0E0            148              POP ACC 
+                     149     ;                OSPrioCur=TASK_NUM-1;
+                     150                             ; SOURCE LINE # 25
+0028 750002   F      151             MOV     OSPrioCur,#02H
+                     152     ;       }
+                     153                             ; SOURCE LINE # 26
+002B                 154     ?C0001:
+                     155     ;       if( OSRdyList[OSPrioCur].DelayCnt != 0)
+                     156                             ; SOURCE LINE # 27
+002B E500     F      157             MOV     A,OSPrioCur
+002D 75F008          158             MOV     B,#08H
+0030 A4              159             MUL     AB
+0031 2400     F      160             ADD     A,#LOW (OSRdyList+06H)
+0033 F8              161             MOV     R0,A
+0034 E6              162             MOV     A,@R0
+0035 FE              163             MOV     R6,A
+0036 08              164             INC     R0
+0037 E6              165             MOV     A,@R0
+0038 4E              166             ORL     A,R6
+0039 604E            167             JZ      ?C0002
+                     168     ;       {
+                     169                             ; SOURCE LINE # 28
+                     170     ;                __asm PUSH ACC       //保护当前任务寄存器
+003B C0E0            171              PUSH ACC        
+                     172     ;                __asm PUSH B
+003D C0F0            173              PUSH B
+                     174     ;                __asm PUSH PSW
+003F C0D0            175              PUSH PSW
+                     176     ;                __asm PUSH DPL
+0041 C082            177              PUSH DPL
+                     178     ;                __asm PUSH DPH
+0043 C083            179              PUSH DPH
+                     180     ;                __asm PUSH 0         //0-7为工作寄存器
+0045 C000            181              PUSH 0          
+                     182     ;                __asm PUSH 1
+0047 C001            183              PUSH 1
+                     184     ;                __asm PUSH 2
+0049 C002            185              PUSH 2
+                     186     ;                __asm PUSH 3
+004B C003            187              PUSH 3
+                     188     ;                __asm PUSH 4
+004D C004            189              PUSH 4
+A51 MACRO ASSEMBLER  TASKSW                                                               11/28/2020 23:37:48 PAGE     4
+
+                     190     ;                __asm PUSH 5
+004F C005            191              PUSH 5
+                     192     ;                __asm PUSH 6
+0051 C006            193              PUSH 6
+                     194     ;                __asm PUSH 7
+0053 C007            195              PUSH 7
+                     196     ;                OSRdyList[OSPrioCur].Task_Sp=SP;   //保存当前堆栈指针
+                     197                             ; SOURCE LINE # 42
+0055 E500     F      198             MOV     A,OSPrioCur
+0057 75F008          199             MOV     B,#08H
+005A A4              200             MUL     AB
+005B 2400     F      201             ADD     A,#LOW (OSRdyList)
+005D F8              202             MOV     R0,A
+005E A681            203             MOV     @R0,SP
+                     204     ; 
+                     205     ;                SP=OSRdyList[OSPrioHighRdy].Task_Sp;     //任务堆栈指针切换
+                     206                             ; SOURCE LINE # 44
+0060 E500     F      207             MOV     A,OSPrioHighRdy
+0062 75F008          208             MOV     B,#08H
+0065 A4              209             MUL     AB
+0066 2400     F      210             ADD     A,#LOW (OSRdyList)
+0068 F8              211             MOV     R0,A
+0069 E6              212             MOV     A,@R0
+006A F581            213             MOV     SP,A
+                     214     ;                __asm POP 7         //恢复任务寄存器
+006C D007            215              POP 7          
+                     216     ;                __asm POP 6
+006E D006            217              POP 6
+                     218     ;                __asm POP 5
+0070 D005            219              POP 5
+                     220     ;                __asm POP 4
+0072 D004            221              POP 4
+                     222     ;                __asm POP 3
+0074 D003            223              POP 3
+                     224     ;                __asm POP 2
+0076 D002            225              POP 2
+                     226     ;                __asm POP 1
+0078 D001            227              POP 1
+                     228     ;                __asm POP 0
+007A D000            229              POP 0
+                     230     ;                __asm POP DPH
+007C D083            231              POP DPH
+                     232     ;                __asm POP DPL
+007E D082            233              POP DPL
+                     234     ;                __asm POP PSW
+0080 D0D0            235              POP PSW
+                     236     ;                __asm POP B
+0082 D0F0            237              POP B
+                     238     ;                __asm POP ACC
+0084 D0E0            239              POP ACC
+                     240     ;                OSPrioCur=OSPrioHighRdy;
+                     241                             ; SOURCE LINE # 58
+0086 850000   F      242             MOV     OSPrioCur,OSPrioHighRdy
+                     243     ;       }
+                     244                             ; SOURCE LINE # 59
+0089                 245     ?C0002:
+                     246     ;               
+                     247     ;       
+                     248     ;       if(OSPrioHighRdy<OSPrioCur)
+                     249                             ; SOURCE LINE # 62
+0089 E500     F      250             MOV     A,OSPrioHighRdy
+008B C3              251             CLR     C
+008C 9500     F      252             SUBB    A,OSPrioCur
+008E 504E            253             JNC     ?C0003
+                     254     ;       {
+                     255                             ; SOURCE LINE # 63
+A51 MACRO ASSEMBLER  TASKSW                                                               11/28/2020 23:37:48 PAGE     5
+
+                     256     ;                __asm PUSH ACC       //保护当前任务寄存器
+0090 C0E0            257              PUSH ACC        
+                     258     ;                __asm PUSH B
+0092 C0F0            259              PUSH B
+                     260     ;                __asm PUSH PSW
+0094 C0D0            261              PUSH PSW
+                     262     ;                __asm PUSH DPL
+0096 C082            263              PUSH DPL
+                     264     ;                __asm PUSH DPH
+0098 C083            265              PUSH DPH
+                     266     ;                __asm PUSH 0         //0-7为工作寄存器
+009A C000            267              PUSH 0          
+                     268     ;                __asm PUSH 1
+009C C001            269              PUSH 1
+                     270     ;                __asm PUSH 2
+009E C002            271              PUSH 2
+                     272     ;                __asm PUSH 3
+00A0 C003            273              PUSH 3
+                     274     ;                __asm PUSH 4
+00A2 C004            275              PUSH 4
+                     276     ;                __asm PUSH 5
+00A4 C005            277              PUSH 5
+                     278     ;                __asm PUSH 6
+00A6 C006            279              PUSH 6
+                     280     ;                __asm PUSH 7
+00A8 C007            281              PUSH 7
+                     282     ;                OSRdyList[OSPrioCur].Task_Sp=SP;   //保存当前堆栈指针
+                     283                             ; SOURCE LINE # 77
+00AA E500     F      284             MOV     A,OSPrioCur
+00AC 75F008          285             MOV     B,#08H
+00AF A4              286             MUL     AB
+00B0 2400     F      287             ADD     A,#LOW (OSRdyList)
+00B2 F8              288             MOV     R0,A
+00B3 A681            289             MOV     @R0,SP
+                     290     ; 
+                     291     ;                SP=OSRdyList[OSPrioHighRdy].Task_Sp;     //任务堆栈指针切换
+                     292                             ; SOURCE LINE # 79
+00B5 E500     F      293             MOV     A,OSPrioHighRdy
+00B7 75F008          294             MOV     B,#08H
+00BA A4              295             MUL     AB
+00BB 2400     F      296             ADD     A,#LOW (OSRdyList)
+00BD F8              297             MOV     R0,A
+00BE E6              298             MOV     A,@R0
+00BF F581            299             MOV     SP,A
+                     300     ;                __asm POP 7         //恢复任务寄存器
+00C1 D007            301              POP 7          
+                     302     ;                __asm POP 6
+00C3 D006            303              POP 6
+                     304     ;                __asm POP 5
+00C5 D005            305              POP 5
+                     306     ;                __asm POP 4
+00C7 D004            307              POP 4
+                     308     ;                __asm POP 3
+00C9 D003            309              POP 3
+                     310     ;                __asm POP 2
+00CB D002            311              POP 2
+                     312     ;                __asm POP 1
+00CD D001            313              POP 1
+                     314     ;                __asm POP 0
+00CF D000            315              POP 0
+                     316     ;                __asm POP DPH
+00D1 D083            317              POP DPH
+                     318     ;                __asm POP DPL
+00D3 D082            319              POP DPL
+                     320     ;                __asm POP PSW
+00D5 D0D0            321              POP PSW
+A51 MACRO ASSEMBLER  TASKSW                                                               11/28/2020 23:37:48 PAGE     6
+
+                     322     ;                __asm POP B
+00D7 D0F0            323              POP B
+                     324     ;                __asm POP ACC
+00D9 D0E0            325              POP ACC
+                     326     ;                OSPrioCur=OSPrioHighRdy;
+                     327                             ; SOURCE LINE # 93
+00DB 850000   F      328             MOV     OSPrioCur,OSPrioHighRdy
+                     329     ;        }
+                     330                             ; SOURCE LINE # 94
+00DE                 331     ?C0003:
+                     332     ;       
+                     333     ; 
+                     334     ;       EA=1;
+                     335                             ; SOURCE LINE # 97
+00DE D2AF            336             SETB    EA
+                     337     ;       __asm RETI
+00E0 32              338              RETI
+                     339     ; }
+                     340                             ; SOURCE LINE # 99
+00E1 22              341             RET     
+                     342     ; END OF Task_Sched
+                     343     
+                     344             END
+A51 MACRO ASSEMBLER  TASKSW                                                               11/28/2020 23:37:48 PAGE     7
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E                T Y P E  V A L U E   ATTRIBUTES
+
+?C0001. . . . . . . .  C ADDR   002BH   R   SEG=?PR?TASK_SCHED?TASKSW
+?C0002. . . . . . . .  C ADDR   0089H   R   SEG=?PR?TASK_SCHED?TASKSW
+?C0003. . . . . . . .  C ADDR   00DEH   R   SEG=?PR?TASK_SCHED?TASKSW
+?PR?TASK_SCHED?TASKSW  C SEG    00E2H       REL=UNIT
+AC. . . . . . . . . .  B ADDR   00D0H.6 A   
+ACC . . . . . . . . .  D ADDR   00E0H   A   
+B . . . . . . . . . .  D ADDR   00F0H   A   
+CP_RL2. . . . . . . .  B ADDR   00C8H.0 A   
+CY. . . . . . . . . .  B ADDR   00D0H.7 A   
+C_T2. . . . . . . . .  B ADDR   00C8H.1 A   
+DPH . . . . . . . . .  D ADDR   0083H   A   
+DPL . . . . . . . . .  D ADDR   0082H   A   
+EA. . . . . . . . . .  B ADDR   00A8H.7 A   
+ES. . . . . . . . . .  B ADDR   00A8H.4 A   
+ET0 . . . . . . . . .  B ADDR   00A8H.1 A   
+ET1 . . . . . . . . .  B ADDR   00A8H.3 A   
+ET2 . . . . . . . . .  B ADDR   00A8H.5 A   
+EX0 . . . . . . . . .  B ADDR   00A8H.0 A   
+EX1 . . . . . . . . .  B ADDR   00A8H.2 A   
+EXEN2 . . . . . . . .  B ADDR   00C8H.3 A   
+EXF2. . . . . . . . .  B ADDR   00C8H.6 A   
+F0. . . . . . . . . .  B ADDR   00D0H.5 A   
+IE. . . . . . . . . .  D ADDR   00A8H   A   
+IE0 . . . . . . . . .  B ADDR   0088H.1 A   
+IE1 . . . . . . . . .  B ADDR   0088H.3 A   
+INT0. . . . . . . . .  B ADDR   00B0H.2 A   
+INT1. . . . . . . . .  B ADDR   00B0H.3 A   
+IP. . . . . . . . . .  D ADDR   00B8H   A   
+IT0 . . . . . . . . .  B ADDR   0088H.0 A   
+IT1 . . . . . . . . .  B ADDR   0088H.2 A   
+OSPRIOCUR . . . . . .  D ADDR   -----       EXT
+OSPRIOHIGHRDY . . . .  D ADDR   -----       EXT
+OSRDYLIST . . . . . .  D ADDR   -----       EXT
+OS_SEARCH . . . . . .  C ADDR   -----       EXT
+OV. . . . . . . . . .  B ADDR   00D0H.2 A   
+P . . . . . . . . . .  B ADDR   00D0H.0 A   
+P0. . . . . . . . . .  D ADDR   0080H   A   
+P1. . . . . . . . . .  D ADDR   0090H   A   
+P2. . . . . . . . . .  D ADDR   00A0H   A   
+P3. . . . . . . . . .  D ADDR   00B0H   A   
+PCON. . . . . . . . .  D ADDR   0087H   A   
+PS. . . . . . . . . .  B ADDR   00B8H.4 A   
+PSW . . . . . . . . .  D ADDR   00D0H   A   
+PT0 . . . . . . . . .  B ADDR   00B8H.1 A   
+PT1 . . . . . . . . .  B ADDR   00B8H.3 A   
+PT2 . . . . . . . . .  B ADDR   00B8H.5 A   
+PX0 . . . . . . . . .  B ADDR   00B8H.0 A   
+PX1 . . . . . . . . .  B ADDR   00B8H.2 A   
+RB8 . . . . . . . . .  B ADDR   0098H.2 A   
+RCAP2H. . . . . . . .  D ADDR   00CBH   A   
+RCAP2L. . . . . . . .  D ADDR   00CAH   A   
+RCLK. . . . . . . . .  B ADDR   00C8H.5 A   
+RD. . . . . . . . . .  B ADDR   00B0H.7 A   
+REN . . . . . . . . .  B ADDR   0098H.4 A   
+RI. . . . . . . . . .  B ADDR   0098H.0 A   
+RS0 . . . . . . . . .  B ADDR   00D0H.3 A   
+RS1 . . . . . . . . .  B ADDR   00D0H.4 A   
+RXD . . . . . . . . .  B ADDR   00B0H.0 A   
+SBUF. . . . . . . . .  D ADDR   0099H   A   
+SCON. . . . . . . . .  D ADDR   0098H   A   
+A51 MACRO ASSEMBLER  TASKSW                                                               11/28/2020 23:37:48 PAGE     8
+
+SM0 . . . . . . . . .  B ADDR   0098H.7 A   
+SM1 . . . . . . . . .  B ADDR   0098H.6 A   
+SM2 . . . . . . . . .  B ADDR   0098H.5 A   
+SP. . . . . . . . . .  D ADDR   0081H   A   
+T0. . . . . . . . . .  B ADDR   00B0H.4 A   
+T1. . . . . . . . . .  B ADDR   00B0H.5 A   
+T2. . . . . . . . . .  B ADDR   0090H.0 A   
+T2CON . . . . . . . .  D ADDR   00C8H   A   
+T2EX. . . . . . . . .  B ADDR   0090H.1 A   
+TASKSW. . . . . . . .  N NUMB   -----       
+TASK_SCHED. . . . . .  C ADDR   0000H   R   SEG=?PR?TASK_SCHED?TASKSW
+TB8 . . . . . . . . .  B ADDR   0098H.3 A   
+TCLK. . . . . . . . .  B ADDR   00C8H.4 A   
+TCON. . . . . . . . .  D ADDR   0088H   A   
+TF0 . . . . . . . . .  B ADDR   0088H.5 A   
+TF1 . . . . . . . . .  B ADDR   0088H.7 A   
+TF2 . . . . . . . . .  B ADDR   00C8H.7 A   
+TH0 . . . . . . . . .  D ADDR   008CH   A   
+TH1 . . . . . . . . .  D ADDR   008DH   A   
+TH2 . . . . . . . . .  D ADDR   00CDH   A   
+TI. . . . . . . . . .  B ADDR   0098H.1 A   
+TL0 . . . . . . . . .  D ADDR   008AH   A   
+TL1 . . . . . . . . .  D ADDR   008BH   A   
+TL2 . . . . . . . . .  D ADDR   00CCH   A   
+TMOD. . . . . . . . .  D ADDR   0089H   A   
+TR0 . . . . . . . . .  B ADDR   0088H.4 A   
+TR1 . . . . . . . . .  B ADDR   0088H.6 A   
+TR2 . . . . . . . . .  B ADDR   00C8H.2 A   
+TXD . . . . . . . . .  B ADDR   00B0H.1 A   
+WR. . . . . . . . . .  B ADDR   00B0H.6 A   
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)

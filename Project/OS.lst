@@ -1,0 +1,167 @@
+C51 COMPILER V9.00   OS                                                                    11/27/2020 21:58:29 PAGE 1   
+
+
+C51 COMPILER V9.00, COMPILATION OF MODULE OS
+OBJECT MODULE PLACED IN .\OS.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE ..\51OS\OS.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\51OS;..\APP;..\BSP;..\HA
+                    -RDWARE;..\..\51-OS;..\Project) DEBUG OBJECTEXTEND PRINT(.\OS.lst) TABS(2) OBJECT(.\OS.obj)
+
+line level    source
+
+   1          /*----------------------------------------------------------
+   2           *  OS.C
+   3           *  系统内核函数
+   4           *  Author：徐
+   5           *  Date：2020.9.29
+   6           *  Describe:Include the main part of 51RTOS
+   7          -----------------------------------------------------------*/
+   8          #include <os.h>
+   9          
+  10          //变量定义区域
+  11          OS_TCB        OSRdyList[TASK_NUM];
+  12          CPU_PRIO      OSPrioTbl;//任务优先级表（8位控制）
+  13          CPU_PRIO      OSPrioCur;//当前优先级
+  14          CPU_PRIO      OSPrioHighRdy;//就绪最高优先级
+  15          OS_TCB        OS_IdleTaskTcb;
+  16          CPU_STK       OS_IdleTaskStk[OS_IdleTaskStkSize];
+  17          
+  18          
+  19          void PrioInsert(CPU_PRIO prio)//置位优先级标志
+  20          {
+  21   1        u8 x;
+  22   1        x=1<<prio;
+  23   1        OSPrioTbl |= x;
+  24   1      }
+  25          
+  26          void PrioRemove(CPU_PRIO prio)//清除优先级标志
+  27          {
+  28   1        u8 x;
+  29   1        x=1<<prio;
+  30   1        OSPrioTbl &= ~x;
+  31   1      }
+  32          
+  33          void OS_RdyListInit(void)//就绪表清空
+  34          {
+  35   1        u8 i;
+  36   1        for(i=0;i<TASK_NUM;i++)
+  37   1        {
+  38   2          OSRdyList[i].DelayCnt=0;
+  39   2          OSRdyList[i].Task_Sp=0;
+  40   2          OSRdyList[i].StkPtr=0;
+  41   2          OSRdyList[i].StkSize=0;
+  42   2          OSRdyList[i].Prio=0;//优先级
+  43   2        }
+  44   1        OSPrioCur=First_Start;
+  45   1      }
+  46          void OS_RdyListInsert(OS_TCB *p_tcb)//TCB插入就绪表
+  47          {
+  48   1        PrioInsert(p_tcb->Prio);
+  49   1      
+  50   1        OSRdyList[p_tcb->Prio].DelayCnt=p_tcb -> DelayCnt;
+  51   1        OSRdyList[p_tcb->Prio].Task_Sp=p_tcb -> Task_Sp;
+  52   1        OSRdyList[p_tcb->Prio].StkPtr=p_tcb -> StkPtr;
+  53   1        OSRdyList[p_tcb->Prio].StkSize=p_tcb -> StkSize;
+  54   1        OSRdyList[p_tcb->Prio].Prio=p_tcb -> Prio;
+C51 COMPILER V9.00   OS                                                                    11/27/2020 21:58:29 PAGE 2   
+
+  55   1      }
+  56          
+  57          
+  58          void OS_DelayCheck(void)
+  59          {
+  60   1        u8 i;
+  61   1        for(i=0;i<TASK_NUM-1;i++)
+  62   1        {
+  63   2          OSRdyList[i].DelayCnt--;
+  64   2          if(OSRdyList[i].DelayCnt<=0)
+  65   2          {
+  66   3            PrioInsert(OSRdyList[i].Prio);
+  67   3            OSRdyList[i].DelayCnt=0;
+  68   3          }
+  69   2        }
+  70   1        PrioInsert(TASK_NUM-1);
+  71   1      
+  72   1      }
+  73          
+  74          void delay_ms(CPU_DELAY_CNT cnt)
+  75          {
+  76   1        OSRdyList[OSPrioCur].DelayCnt=cnt;
+  77   1        PrioRemove(OSRdyList[OSPrioCur].Prio);
+  78   1      
+  79   1      }
+  80          
+  81          
+  82          void OS_Search(void)
+  83          {
+  84   1        u8 i=0;
+  85   1          
+  86   1        for(i=0;i<TASK_NUM;i++)
+  87   1        {
+  88   2          if(((OSPrioTbl>>i)&0x01)==1)
+  89   2          {
+  90   3            OSPrioHighRdy=i;
+  91   3            break;
+  92   3          }
+  93   2        }
+  94   1        
+  95   1      }
+  96          void OSTaskCreat(
+  97                          OS_TCB         *p_tcb,
+  98                          unsigned int   p_task,
+  99                          CPU_PRIO       prio,
+ 100                          CPU_STK        *p_stk_base,
+ 101                          CPU_STK_SIZE   stk_size
+ 102                          )
+ 103          {
+ 104   1        p_tcb->Task_Sp=p_stk_base;
+*** WARNING C260 IN LINE 104 OF ..\51OS\OS.C: '=': pointer truncation
+ 105   1        p_stk_base[0]=p_task;        //将任务入口地址保存在堆栈，压入低8位
+ 106   1        p_tcb->Task_Sp++;                         //压入一个后，堆栈加1，因为51的堆栈是往上生
+             -长的
+ 107   1        p_stk_base[1]=p_task>>8;     //压入高8位
+ 108   1        p_tcb->Task_Sp+=13;   //设置好堆栈指针
+ 109   1                              //即任务开始进入时，堆栈要模仿成被切换返回时的样子
+ 110   1                              //这时寄存器是被压栈的，且是压入了Num_PUSH_bytes个
+ 111   1        p_tcb->StkPtr=p_stk_base;
+ 112   1        p_tcb->StkSize=stk_size;
+ 113   1        p_tcb->Prio=prio;
+ 114   1        
+C51 COMPILER V9.00   OS                                                                    11/27/2020 21:58:29 PAGE 3   
+
+ 115   1        OS_RdyListInsert(p_tcb);
+ 116   1        
+ 117   1        
+ 118   1      }
+ 119          
+ 120          void OS_SysTickInit(void)
+ 121          {
+ 122   1        EA=1;
+ 123   1        TMOD |= 0x10;
+ 124   1        TH1=0xFC;
+ 125   1        TL1=0x18;
+ 126   1        TR1=1;
+ 127   1        ET1=1;
+ 128   1      }
+ 129          
+ 130          void SysTick() interrupt 3
+ 131          {
+ 132   1        TH1=0xFC;
+ 133   1        TL1=0x18;
+ 134   1        EA=0;
+ 135   1        OS_DelayCheck();
+ 136   1        Task_Sched();
+ 137   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    563    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     50      13
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)

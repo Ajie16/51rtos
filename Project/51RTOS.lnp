@@ -1,0 +1,8 @@
+".\led.obj",
+".\app.obj",
+".\bsp.obj",
+"STARTUP.obj",
+".\OS.obj",
+".\TASKSW.obj" 
+TO "51RTOS" 
+RAMSIZE(256) 

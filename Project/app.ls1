@@ -1,0 +1,396 @@
+A51 MACRO ASSEMBLER  APP                                                                  11/26/2020 18:23:20 PAGE     1
+
+
+MACRO ASSEMBLER A51 V8.01
+OBJECT MODULE PLACED IN .\app.OBJ
+ASSEMBLER INVOKED BY: C:\Keil_v5\C51\BIN\A51.EXE .\app.src PR(.\app.ls1) EP DEBUG
+
+LOC  OBJ            LINE     SOURCE
+
+                       1     ; .\app.SRC generated from: ..\APP\app.c
+                       2     ; COMPILER INVOKED BY:
+                       3     ;        C:\Keil_v5\C51\BIN\C51.EXE ..\APP\app.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\51OS;..
+                             \APP;..\BSP;..\HARDWARE;..\..\51-OS;..\Project) DEBUG OBJECTEXTEND PRINT(.\app.lst) TABS(2) SRC(.\app.SRC)
+                       4     
+                       5     $nomod51 
+                       6     
+                       7     NAME    APP
+                       8     
+  0080                 9     P0      DATA    080H
+  0090                10     P1      DATA    090H
+  00A0                11     P2      DATA    0A0H
+  00B0                12     P3      DATA    0B0H
+  00B4                13     T0      BIT     0B0H.4
+  00D6                14     AC      BIT     0D0H.6
+  00B5                15     T1      BIT     0B0H.5
+  00A0                16     LED0    BIT     0A0H.0
+  0090                17     T2      BIT     090H.0
+  00AF                18     EA      BIT     0A8H.7
+  00A1                19     LED1    BIT     0A0H.1
+  00A8                20     IE      DATA    0A8H
+  00CE                21     EXF2    BIT     0C8H.6
+  00B7                22     RD      BIT     0B0H.7
+  00AC                23     ES      BIT     0A8H.4
+  00B8                24     IP      DATA    0B8H
+  0098                25     RI      BIT     098H.0
+  00B2                26     INT0    BIT     0B0H.2
+  00D7                27     CY      BIT     0D0H.7
+  0099                28     TI      BIT     098H.1
+  00B3                29     INT1    BIT     0B0H.3
+  00CB                30     RCAP2H  DATA    0CBH
+  00BC                31     PS      BIT     0B8H.4
+  0081                32     SP      DATA    081H
+  0091                33     T2EX    BIT     090H.1
+  00D2                34     OV      BIT     0D0H.2
+  00CA                35     RCAP2L  DATA    0CAH
+  00C9                36     C_T2    BIT     0C8H.1
+  00B6                37     WR      BIT     0B0H.6
+  00CD                38     RCLK    BIT     0C8H.5
+  00CC                39     TCLK    BIT     0C8H.4
+  0099                40     SBUF    DATA    099H
+  0087                41     PCON    DATA    087H
+  0098                42     SCON    DATA    098H
+  0089                43     TMOD    DATA    089H
+  0088                44     TCON    DATA    088H
+  0089                45     IE0     BIT     088H.1
+  008B                46     IE1     BIT     088H.3
+  00F0                47     B       DATA    0F0H
+  00C8                48     CP_RL2  BIT     0C8H.0
+  00E0                49     ACC     DATA    0E0H
+  00A9                50     ET0     BIT     0A8H.1
+  00AB                51     ET1     BIT     0A8H.3
+  008D                52     TF0     BIT     088H.5
+  00AD                53     ET2     BIT     0A8H.5
+  008F                54     TF1     BIT     088H.7
+  00CF                55     TF2     BIT     0C8H.7
+  009A                56     RB8     BIT     098H.2
+  008C                57     TH0     DATA    08CH
+A51 MACRO ASSEMBLER  APP                                                                  11/26/2020 18:23:20 PAGE     2
+
+  00A8                58     EX0     BIT     0A8H.0
+  0088                59     IT0     BIT     088H.0
+  008D                60     TH1     DATA    08DH
+  009B                61     TB8     BIT     098H.3
+  00AA                62     EX1     BIT     0A8H.2
+  008A                63     IT1     BIT     088H.2
+  00CD                64     TH2     DATA    0CDH
+  00D0                65     P       BIT     0D0H.0
+  009F                66     SM0     BIT     098H.7
+  008A                67     TL0     DATA    08AH
+  009E                68     SM1     BIT     098H.6
+  008B                69     TL1     DATA    08BH
+  009D                70     SM2     BIT     098H.5
+  00CC                71     TL2     DATA    0CCH
+  00B9                72     PT0     BIT     0B8H.1
+  00BB                73     PT1     BIT     0B8H.3
+  00D3                74     RS0     BIT     0D0H.3
+  00BD                75     PT2     BIT     0B8H.5
+  008C                76     TR0     BIT     088H.4
+  00D4                77     RS1     BIT     0D0H.4
+  008E                78     TR1     BIT     088H.6
+  00CA                79     TR2     BIT     0C8H.2
+  00B8                80     PX0     BIT     0B8H.0
+  00BA                81     PX1     BIT     0B8H.2
+  0083                82     DPH     DATA    083H
+  0082                83     DPL     DATA    082H
+  00CB                84     EXEN2   BIT     0C8H.3
+  009C                85     REN     BIT     098H.4
+  00C8                86     T2CON   DATA    0C8H
+  00B0                87     RXD     BIT     0B0H.0
+  00B1                88     TXD     BIT     0B0H.1
+  00D5                89     F0      BIT     0D0H.5
+  00D0                90     PSW     DATA    0D0H
+                      91     ?PR?main?APP         SEGMENT CODE 
+                      92     ?PR?task1?APP        SEGMENT CODE 
+                      93     ?PR?task2?APP        SEGMENT CODE 
+                      94     ?DT?APP              SEGMENT DATA 
+                      95             EXTRN   CODE (OS_IdleInit)
+                      96             EXTRN   CODE (_OSTaskCreat)
+                      97             EXTRN   DATA (?_OSTaskCreat?BYTE)
+                      98             EXTRN   CODE (_delay_ms)
+                      99             EXTRN   CODE (OS_SysTickInit)
+                     100             EXTRN   CODE (OS_RdyListInit)
+                     101             EXTRN   CODE (?C_STARTUP)
+                     102             PUBLIC  task2
+                     103             PUBLIC  task1
+                     104             PUBLIC  main
+                     105     
+----                 106             RSEG  ?DT?APP
+0000                 107           Task1_Stk:   DS   5
+0005                 108           Task2_Stk:   DS   10
+000F                 109            Task1Tcb:   DS   8
+0017                 110            Task2Tcb:   DS   8
+                     111     ; #include "app.h"
+                     112     ; #include "OS.h"
+                     113     ; #include "led.h"
+                     114     ; #include "bsp.h"
+                     115     ; 
+                     116     ; #define TASK1_STK_SIZE 5
+                     117     ; #define TASK2_STK_SIZE 10
+                     118     ; 
+                     119     ; static CPU_STK Task1_Stk[TASK1_STK_SIZE];
+                     120     ; static CPU_STK Task2_Stk[TASK2_STK_SIZE];
+                     121     ; 
+                     122     ; static OS_TCB  Task1Tcb;
+                     123     ; static OS_TCB  Task2Tcb;
+A51 MACRO ASSEMBLER  APP                                                                  11/26/2020 18:23:20 PAGE     3
+
+                     124     ; 
+                     125     ; void task1(void);
+                     126     ; void task2(void);
+                     127     ; 
+                     128     ; sbit LED0=P2^0;
+                     129     ; sbit LED1=P2^1;
+                     130     ; void main(void)
+                     131     
+----                 132             RSEG  ?PR?main?APP
+0000                 133     main:
+                     134             USING   0
+                     135                             ; SOURCE LINE # 20
+                     136     ; {
+                     137                             ; SOURCE LINE # 21
+                     138     ;       OS_SysTickInit();
+                     139                             ; SOURCE LINE # 22
+0000 120000   F      140             LCALL   OS_SysTickInit
+                     141     ;       OS_RdyListInit();
+                     142                             ; SOURCE LINE # 23
+0003 120000   F      143             LCALL   OS_RdyListInit
+                     144     ;       OS_IdleInit();
+                     145                             ; SOURCE LINE # 24
+0006 120000   F      146             LCALL   OS_IdleInit
+                     147     ;       OSTaskCreat(
+                     148     ;                                                       &Task1Tcb,
+                     149     ;                                                       (unsigned int)   &task1,
+                     150                             ; SOURCE LINE # 27
+0009 7C00     F      151             MOV     R4,#HIGH (task1)
+000B 7D00     F      152             MOV     R5,#LOW (task1)
+000D E4              153             CLR     A
+000E F500     F      154             MOV     ?_OSTaskCreat?BYTE+05H,A
+0010 F500     F      155             MOV     ?_OSTaskCreat?BYTE+06H,A
+0012 750000   F      156             MOV     ?_OSTaskCreat?BYTE+07H,#HIGH (Task1_Stk)
+0015 750000   F      157             MOV     ?_OSTaskCreat?BYTE+08H,#LOW (Task1_Stk)
+0018 750005   F      158             MOV     ?_OSTaskCreat?BYTE+09H,#05H
+001B FB              159             MOV     R3,A
+001C 7A00     F      160             MOV     R2,#HIGH (Task1Tcb)
+001E 7900     F      161             MOV     R1,#LOW (Task1Tcb)
+0020 120000   F      162             LCALL   _OSTaskCreat
+                     163     ;                                                       0,
+                     164     ;                                                       &Task1_Stk,
+                     165     ;                                                       TASK1_STK_SIZE
+                     166     ;                                                );     
+                     167     ; 
+                     168     ;                                                               
+                     169     ;       OSTaskCreat(
+                     170     ;                                                       &Task2Tcb,
+                     171     ;                                                       (unsigned int)   &task2,
+                     172                             ; SOURCE LINE # 36
+0023 7C00     F      173             MOV     R4,#HIGH (task2)
+0025 7D00     F      174             MOV     R5,#LOW (task2)
+0027 750001   F      175             MOV     ?_OSTaskCreat?BYTE+05H,#01H
+002A 750000   F      176             MOV     ?_OSTaskCreat?BYTE+06H,#00H
+002D 750000   F      177             MOV     ?_OSTaskCreat?BYTE+07H,#HIGH (Task2_Stk)
+0030 750000   F      178             MOV     ?_OSTaskCreat?BYTE+08H,#LOW (Task2_Stk)
+0033 75000A   F      179             MOV     ?_OSTaskCreat?BYTE+09H,#0AH
+0036 7B00            180             MOV     R3,#00H
+0038 7A00     F      181             MOV     R2,#HIGH (Task2Tcb)
+003A 7900     F      182             MOV     R1,#LOW (Task2Tcb)
+003C 120000   F      183             LCALL   _OSTaskCreat
+003F                 184     ?C0001:
+                     185     ;                                                       1,
+                     186     ;                                                       &Task2_Stk,
+                     187     ;                                                       TASK2_STK_SIZE
+                     188     ;                                                );
+                     189     ;       while(1)
+A51 MACRO ASSEMBLER  APP                                                                  11/26/2020 18:23:20 PAGE     4
+
+                     190                             ; SOURCE LINE # 41
+                     191     ;       {
+                     192                             ; SOURCE LINE # 42
+                     193     ;               LED1=~LED1;
+                     194                             ; SOURCE LINE # 43
+003F B2A1            195             CPL     LED1
+                     196     ;       }
+                     197                             ; SOURCE LINE # 44
+0041 80FC            198             SJMP    ?C0001
+                     199     ; END OF main
+                     200     
+                     201     ; }
+                     202     ; 
+                     203     ; void task1(void) 
+                     204     
+----                 205             RSEG  ?PR?task1?APP
+0000                 206     task1:
+                     207             USING   0
+                     208                             ; SOURCE LINE # 47
+                     209     ; {
+                     210                             ; SOURCE LINE # 48
+0000                 211     ?C0004:
+                     212     ;       while(1)
+                     213                             ; SOURCE LINE # 49
+                     214     ;       {
+                     215                             ; SOURCE LINE # 50
+                     216     ;               LED1=~LED1;
+                     217                             ; SOURCE LINE # 51
+0000 B2A1            218             CPL     LED1
+                     219     ;               delay_ms(500);
+                     220                             ; SOURCE LINE # 52
+0002 7FF4            221             MOV     R7,#0F4H
+0004 7E01            222             MOV     R6,#01H
+0006 120000   F      223             LCALL   _delay_ms
+                     224     ;       }
+                     225                             ; SOURCE LINE # 53
+0009 80F5            226             SJMP    ?C0004
+                     227     ; END OF task1
+                     228     
+                     229     ; }
+                     230     ; 
+                     231     ; 
+                     232     ; void task2(void)
+                     233     
+----                 234             RSEG  ?PR?task2?APP
+0000                 235     task2:
+                     236             USING   0
+                     237                             ; SOURCE LINE # 57
+                     238     ; {
+                     239                             ; SOURCE LINE # 58
+0000                 240     ?C0007:
+                     241     ;       while(1)
+                     242                             ; SOURCE LINE # 59
+                     243     ;       {
+                     244                             ; SOURCE LINE # 60
+                     245     ;               LED0=~LED0;
+                     246                             ; SOURCE LINE # 61
+0000 B2A0            247             CPL     LED0
+                     248     ;               delay_ms(1000);
+                     249                             ; SOURCE LINE # 62
+0002 7FE8            250             MOV     R7,#0E8H
+0004 7E03            251             MOV     R6,#03H
+0006 120000   F      252             LCALL   _delay_ms
+                     253     ;       }
+                     254                             ; SOURCE LINE # 63
+0009 80F5            255             SJMP    ?C0007
+A51 MACRO ASSEMBLER  APP                                                                  11/26/2020 18:23:20 PAGE     5
+
+                     256     ; END OF task2
+                     257     
+                     258             END
+A51 MACRO ASSEMBLER  APP                                                                  11/26/2020 18:23:20 PAGE     6
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E             T Y P E  V A L U E   ATTRIBUTES
+
+?C0001 . . . . . .  C ADDR   003FH   R   SEG=?PR?MAIN?APP
+?C0004 . . . . . .  C ADDR   0000H   R   SEG=?PR?TASK1?APP
+?C0007 . . . . . .  C ADDR   0000H   R   SEG=?PR?TASK2?APP
+?C_STARTUP . . . .  C ADDR   -----       EXT
+?DT?APP. . . . . .  D SEG    001FH       REL=UNIT
+?PR?MAIN?APP . . .  C SEG    0043H       REL=UNIT
+?PR?TASK1?APP. . .  C SEG    000BH       REL=UNIT
+?PR?TASK2?APP. . .  C SEG    000BH       REL=UNIT
+?_OSTASKCREAT?BYTE  D ADDR   -----       EXT
+AC . . . . . . . .  B ADDR   00D0H.6 A   
+ACC. . . . . . . .  D ADDR   00E0H   A   
+APP. . . . . . . .  N NUMB   -----       
+B. . . . . . . . .  D ADDR   00F0H   A   
+CP_RL2 . . . . . .  B ADDR   00C8H.0 A   
+CY . . . . . . . .  B ADDR   00D0H.7 A   
+C_T2 . . . . . . .  B ADDR   00C8H.1 A   
+DPH. . . . . . . .  D ADDR   0083H   A   
+DPL. . . . . . . .  D ADDR   0082H   A   
+EA . . . . . . . .  B ADDR   00A8H.7 A   
+ES . . . . . . . .  B ADDR   00A8H.4 A   
+ET0. . . . . . . .  B ADDR   00A8H.1 A   
+ET1. . . . . . . .  B ADDR   00A8H.3 A   
+ET2. . . . . . . .  B ADDR   00A8H.5 A   
+EX0. . . . . . . .  B ADDR   00A8H.0 A   
+EX1. . . . . . . .  B ADDR   00A8H.2 A   
+EXEN2. . . . . . .  B ADDR   00C8H.3 A   
+EXF2 . . . . . . .  B ADDR   00C8H.6 A   
+F0 . . . . . . . .  B ADDR   00D0H.5 A   
+IE . . . . . . . .  D ADDR   00A8H   A   
+IE0. . . . . . . .  B ADDR   0088H.1 A   
+IE1. . . . . . . .  B ADDR   0088H.3 A   
+INT0 . . . . . . .  B ADDR   00B0H.2 A   
+INT1 . . . . . . .  B ADDR   00B0H.3 A   
+IP . . . . . . . .  D ADDR   00B8H   A   
+IT0. . . . . . . .  B ADDR   0088H.0 A   
+IT1. . . . . . . .  B ADDR   0088H.2 A   
+LED0 . . . . . . .  B ADDR   00A0H.0 A   
+LED1 . . . . . . .  B ADDR   00A0H.1 A   
+MAIN . . . . . . .  C ADDR   0000H   R   SEG=?PR?MAIN?APP
+OS_IDLEINIT. . . .  C ADDR   -----       EXT
+OS_RDYLISTINIT . .  C ADDR   -----       EXT
+OS_SYSTICKINIT . .  C ADDR   -----       EXT
+OV . . . . . . . .  B ADDR   00D0H.2 A   
+P. . . . . . . . .  B ADDR   00D0H.0 A   
+P0 . . . . . . . .  D ADDR   0080H   A   
+P1 . . . . . . . .  D ADDR   0090H   A   
+P2 . . . . . . . .  D ADDR   00A0H   A   
+P3 . . . . . . . .  D ADDR   00B0H   A   
+PCON . . . . . . .  D ADDR   0087H   A   
+PS . . . . . . . .  B ADDR   00B8H.4 A   
+PSW. . . . . . . .  D ADDR   00D0H   A   
+PT0. . . . . . . .  B ADDR   00B8H.1 A   
+PT1. . . . . . . .  B ADDR   00B8H.3 A   
+PT2. . . . . . . .  B ADDR   00B8H.5 A   
+PX0. . . . . . . .  B ADDR   00B8H.0 A   
+PX1. . . . . . . .  B ADDR   00B8H.2 A   
+RB8. . . . . . . .  B ADDR   0098H.2 A   
+RCAP2H . . . . . .  D ADDR   00CBH   A   
+RCAP2L . . . . . .  D ADDR   00CAH   A   
+RCLK . . . . . . .  B ADDR   00C8H.5 A   
+A51 MACRO ASSEMBLER  APP                                                                  11/26/2020 18:23:20 PAGE     7
+
+RD . . . . . . . .  B ADDR   00B0H.7 A   
+REN. . . . . . . .  B ADDR   0098H.4 A   
+RI . . . . . . . .  B ADDR   0098H.0 A   
+RS0. . . . . . . .  B ADDR   00D0H.3 A   
+RS1. . . . . . . .  B ADDR   00D0H.4 A   
+RXD. . . . . . . .  B ADDR   00B0H.0 A   
+SBUF . . . . . . .  D ADDR   0099H   A   
+SCON . . . . . . .  D ADDR   0098H   A   
+SM0. . . . . . . .  B ADDR   0098H.7 A   
+SM1. . . . . . . .  B ADDR   0098H.6 A   
+SM2. . . . . . . .  B ADDR   0098H.5 A   
+SP . . . . . . . .  D ADDR   0081H   A   
+T0 . . . . . . . .  B ADDR   00B0H.4 A   
+T1 . . . . . . . .  B ADDR   00B0H.5 A   
+T2 . . . . . . . .  B ADDR   0090H.0 A   
+T2CON. . . . . . .  D ADDR   00C8H   A   
+T2EX . . . . . . .  B ADDR   0090H.1 A   
+TASK1. . . . . . .  C ADDR   0000H   R   SEG=?PR?TASK1?APP
+TASK1TCB . . . . .  D ADDR   000FH   R   SEG=?DT?APP
+TASK1_STK. . . . .  D ADDR   0000H   R   SEG=?DT?APP
+TASK2. . . . . . .  C ADDR   0000H   R   SEG=?PR?TASK2?APP
+TASK2TCB . . . . .  D ADDR   0017H   R   SEG=?DT?APP
+TASK2_STK. . . . .  D ADDR   0005H   R   SEG=?DT?APP
+TB8. . . . . . . .  B ADDR   0098H.3 A   
+TCLK . . . . . . .  B ADDR   00C8H.4 A   
+TCON . . . . . . .  D ADDR   0088H   A   
+TF0. . . . . . . .  B ADDR   0088H.5 A   
+TF1. . . . . . . .  B ADDR   0088H.7 A   
+TF2. . . . . . . .  B ADDR   00C8H.7 A   
+TH0. . . . . . . .  D ADDR   008CH   A   
+TH1. . . . . . . .  D ADDR   008DH   A   
+TH2. . . . . . . .  D ADDR   00CDH   A   
+TI . . . . . . . .  B ADDR   0098H.1 A   
+TL0. . . . . . . .  D ADDR   008AH   A   
+TL1. . . . . . . .  D ADDR   008BH   A   
+TL2. . . . . . . .  D ADDR   00CCH   A   
+TMOD . . . . . . .  D ADDR   0089H   A   
+TR0. . . . . . . .  B ADDR   0088H.4 A   
+TR1. . . . . . . .  B ADDR   0088H.6 A   
+TR2. . . . . . . .  B ADDR   00C8H.2 A   
+TXD. . . . . . . .  B ADDR   00B0H.1 A   
+WR . . . . . . . .  B ADDR   00B0H.6 A   
+_DELAY_MS. . . . .  C ADDR   -----       EXT
+_OSTASKCREAT . . .  C ADDR   -----       EXT
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)

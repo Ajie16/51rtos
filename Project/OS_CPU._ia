@@ -1,0 +1,1 @@
+"..\51OS\OS_CPU.s" SET (SMALL) DEBUG PRINT(.\OS_CPU.lst) OBJECT(.\OS_CPU.obj) EP
